@@ -143,12 +143,12 @@ const fireColorsPalette = [{
     "g": 239,
     "b": 199
 }, {
-    "r": 255,
-    "g": 255,
-    "b": 255
+    "r": 239,
+    "g": 239,
+    "b": 199
 }]
 
-const Square = {
+const fireFragment = {
     x: 0,
     y: 0,
     width: 5,
@@ -160,34 +160,34 @@ const canvas = document.getElementById("myCanvas");
 const context = canvas.getContext('2d');
 const fire = [];
 const loop = null;
-const particles = 140;
+const particles = 100;
 
-function start() {
-    fillFire();
-    loop = setInterval(update, 50);
+function start () {
+    syncFire();
+    loop = setInterval(updateFire, 50);
 }
 
-function fillFire() {
+function syncFire () {
     for (var i = 0; i < fire.length - 1; i++) {
         if (fire[i].life <= 0) {
             fire.splice(i, 1);
         }
     }
     for (var i = 0; i < particles; i++) {
-        const clone = Object.assign({}, Square);
+        const clone = Object.assign({}, fireFragment);
         clone.x = i * clone.width;
         clone.y = canvas.height - clone.height;
         fire.push(clone);
     }
 }
 
-function update() {
+function updateFire () {
     context.clearRect(0, 0, canvas.width, canvas.height);
     fire.forEach(updateFireFragment)
-    fillFire();
+    syncFire();
 }
 
-function updateFireFragment(fragment) {
+function updateFireFragment (fragment) {
     if (fragment.life > 0) {
         context.fillStyle = "rgb(" + fireColorsPalette[fragment.life].r + ", " + fireColorsPalette[fragment.life].g + ", " + fireColorsPalette[fragment.life].b + ")";
         context.fillRect(fragment.x, fragment.y, fragment.width, fragment.height);
